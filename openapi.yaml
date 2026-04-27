@@ -1,0 +1,560 @@
+openapi: 3.0.0
+info:
+  title: API Patrimoine Arbore - Saint-Quentin
+  version: 1.0.0
+  description: API de gestion des arbres urbains de Saint-Quentin
+
+servers:
+  - url: /api
+
+tags:
+  - name: Arbres
+    description: Gestion des arbres
+  - name: Referentiels
+    description: Listes de valeurs pour les formulaires
+  - name: IA
+    description: Predictions par intelligence artificielle
+
+paths:
+
+  # =====================
+  # ARBRES
+  # =====================
+  /arbres:
+    get:
+      summary: Recuperer tous les arbres
+      description: Retourne la liste de tous les arbres de la base de donnees
+      tags: [Arbres]
+      responses:
+        '200':
+          description: Liste des arbres retournee avec succes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Arbre'
+        '500':
+          description: Erreur serveur
+
+    post:
+      summary: Ajouter un nouvel arbre
+      description: Ajoute un nouvel arbre dans la base de donnees
+      tags: [Arbres]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbreInput'
+      responses:
+        '201':
+          description: Arbre ajoute avec succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Arbre ajoute avec succes
+                  global_id:
+                    type: string
+                    example: ARB-042
+        '400':
+          description: Donnees invalides
+        '500':
+          description: Erreur serveur
+
+  # =====================
+  # REFERENTIELS
+  # =====================
+  /etats:
+    get:
+      summary: Recuperer tous les etats possibles d'un arbre
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des etats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    fk_arb_etat:
+                      type: string
+                      example: En place
+        '500':
+          description: Erreur serveur
+
+  /stades:
+    get:
+      summary: Recuperer tous les stades de developpement
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des stades de developpement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    fk_stadedev:
+                      type: string
+                      example: Adulte
+        '500':
+          description: Erreur serveur
+
+  /ports:
+    get:
+      summary: Recuperer tous les types de port
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des types de port
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    fk_port:
+                      type: string
+                      example: Libre
+        '500':
+          description: Erreur serveur
+
+  /pieds:
+    get:
+      summary: Recuperer tous les types de pied
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des types de pied
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    fk_pied:
+                      type: string
+                      example: Terre
+        '500':
+          description: Erreur serveur
+
+  /feuillages:
+    get:
+      summary: Recuperer tous les types de feuillage
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des types de feuillage
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    feuillage:
+                      type: string
+                      example: Caduc
+        '500':
+          description: Erreur serveur
+
+  /nomstechniques:
+    get:
+      summary: Recuperer tous les noms techniques
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des noms techniques
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    fk_nomtech:
+                      type: string
+                      example: Quercus robur
+        '500':
+          description: Erreur serveur
+
+  /revetements:
+    get:
+      summary: Recuperer tous les types de revetement
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des types de revetement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    fk_revetement:
+                      type: boolean
+                      example: true
+        '500':
+          description: Erreur serveur
+
+  /situations:
+    get:
+      summary: Recuperer toutes les situations
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des situations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    fk_situation:
+                      type: string
+                      example: Alignement
+        '500':
+          description: Erreur serveur
+
+  /secteurs:
+    get:
+      summary: Recuperer tous les secteurs
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des secteurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    Secteur:
+                      type: string
+                      example: Nord
+                    id_Quartier:
+                      type: integer
+                      example: 2
+        '500':
+          description: Erreur serveur
+
+  /quartiers:
+    get:
+      summary: Recuperer tous les quartiers
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des quartiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    Quartier:
+                      type: string
+                      example: Centre-ville
+        '500':
+          description: Erreur serveur
+
+  /remarquables:
+    get:
+      summary: Recuperer les valeurs possibles pour remarquable
+      tags: [Referentiels]
+      responses:
+        '200':
+          description: Liste des valeurs remarquable
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    remarquable:
+                      type: boolean
+                      example: true
+        '500':
+          description: Erreur serveur
+
+  # =====================
+  # IA
+  # =====================
+  /predict/cluster:
+    post:
+      summary: Predire les clusters de tous les arbres
+      description: Appelle le script Python K-Means pour predire le cluster de chaque arbre de la BDD
+      tags: [IA]
+      responses:
+        '200':
+          description: Clusters predits avec succes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    global_id:
+                      type: string
+                      example: ARB-001
+                    cluster:
+                      type: integer
+                      example: 2
+                    x:
+                      type: number
+                      example: 49.8467
+                    y:
+                      type: number
+                      example: 3.2875
+        '500':
+          description: Erreur serveur
+
+  /predict/age/{global_id}:
+    post:
+      summary: Predire l'age d'un arbre
+      description: Appelle le script Python de regression pour predire l'age d'un arbre
+      tags: [IA]
+      parameters:
+        - name: global_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: ARB-001
+      responses:
+        '200':
+          description: Age predit avec succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  global_id:
+                    type: string
+                    example: ARB-001
+                  age_predit:
+                    type: integer
+                    example: 45
+        '404':
+          description: Arbre non trouve
+        '500':
+          description: Erreur serveur
+
+  /predict/deracinement/{global_id}:
+    post:
+      summary: Predire le risque de deracinement d'un arbre
+      description: Appelle le script Python de classification pour predire le risque de deracinement lors d'une tempete
+      tags: [IA]
+      parameters:
+        - name: global_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: ARB-001
+      responses:
+        '200':
+          description: Risque predit avec succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  global_id:
+                    type: string
+                    example: ARB-001
+                  risque:
+                    type: string
+                    example: En place
+                  probabilite:
+                    type: number
+                    example: 0.87
+        '404':
+          description: Arbre non trouve
+        '500':
+          description: Erreur serveur
+
+# =====================
+# SCHEMAS
+# =====================
+components:
+  schemas:
+
+    Arbre:
+      type: object
+      properties:
+        global_id:
+          type: string
+          example: ARB-001
+        x:
+          type: number
+          example: 49.8467
+        y:
+          type: number
+          example: 3.2875
+        haut_tot:
+          type: integer
+          example: 12
+        haut_tronc:
+          type: integer
+          example: 3
+        tronc_diam:
+          type: integer
+          example: 45
+        dte_plantation:
+          type: string
+          format: date
+          example: 2005-03-15
+        dte_abattage:
+          type: string
+          format: date
+          example: 2024-01-10
+        age_estim:
+          type: integer
+          example: 20
+        clc_nbr_diag:
+          type: integer
+          example: 3
+        id_Etat:
+          type: integer
+          example: 1
+        id_Feuillage:
+          type: integer
+          example: 2
+        id_Nom_technique:
+          type: integer
+          example: 3
+        id_Revetement:
+          type: integer
+          example: 1
+        id_Port:
+          type: integer
+          example: 2
+        id_Pied:
+          type: integer
+          example: 1
+        id_Situation:
+          type: integer
+          example: 3
+        id_remarquable:
+          type: integer
+          example: 1
+        id_Stade_developpement:
+          type: integer
+          example: 2
+        id_Secteur:
+          type: integer
+          example: 1
+
+    ArbreInput:
+      type: object
+      required:
+        - haut_tot
+        - haut_tronc
+        - tronc_diam
+        - x
+        - y
+        - id_Etat
+        - id_Stade_developpement
+        - id_Port
+        - id_Pied
+        - id_remarquable
+      properties:
+        x:
+          type: number
+          example: 49.8467
+        y:
+          type: number
+          example: 3.2875
+        haut_tot:
+          type: integer
+          example: 12
+        haut_tronc:
+          type: integer
+          example: 3
+        tronc_diam:
+          type: integer
+          example: 45
+        dte_plantation:
+          type: string
+          format: date
+          example: 2005-03-15
+        id_remarquable:
+          type: integer
+          example: 1
+        id_Feuillage:
+          type: integer
+          example: 2
+        id_Nom_technique:
+          type: integer
+          example: 3
+        id_Revetement:
+          type: integer
+          example: 1
+        id_Situation:
+          type: integer
+          example: 1
+        id_Pied:
+          type: integer
+          example: 2
+        id_Port:
+          type: integer
+          example: 1
+        id_Stade_developpement:
+          type: integer
+          example: 3
+        id_Etat:
+          type: integer
+          example: 1
+        id_Secteur:
+          type: integer
+          example: 2
