@@ -99,64 +99,64 @@ spacing:
   stack-lg: 48px
 ---
 
-## Brand & Style
+## Marque et Style
 
-The design system is rooted in the intersection of environmental conservation and modern data science. It evokes a sense of "Organic Professionalism"—a style that balances the wild, tactile essence of nature with the precision of a scientific inventory tool. The target audience includes urban planners, environmentalists, and engaged citizens who require a tool that feels both authoritative and life-affirming.
+Le système de design est ancré à l'intersection de la conservation de l'environnement et de la science des données moderne. Il évoque un sentiment de « professionnalisme organique » — un style qui équilibre l'essence sauvage et tactile de la nature avec la précision d'un outil d'inventaire scientifique. Le public cible comprend les urbanistes, les environnementalistes et les citoyens engagés qui recherchent un outil à la fois autoritaire et inspirant.
 
-The aesthetic follows a **Modern-Corporate** movement with strong **Minimalist** influences. It prioritizes clarity and whitespace to handle complex data visualizations while using a warm, nature-inspired palette to prevent the interface from feeling cold or institutional. The interface should feel like a premium botanical journal brought into the digital age.
+L'esthétique suit un mouvement **moderne-corporate** avec de fortes influences **minimalistes**. Elle donne la priorité à la clarté et aux espaces blancs pour gérer des visualisations de données complexes, tout en utilisant une palette inspirée de la nature pour éviter que l'interface ne paraisse froide ou institutionnelle. L'interface doit être perçue comme un journal botanique de prestige transposé à l'ère numérique.
 
-## Colors
+## Couleurs
 
-The palette is anchored by "Deep Forest Green" to represent longevity and protection. This is supported by "Sage Green" for interactive elements and accents, creating a harmonious monochromatic scale for data density. 
+La palette est ancrée par un « Vert Forêt Profond » pour représenter la longévité et la protection. Celui-ci est soutenu par un « Vert Sauge » pour les éléments interactifs et les accents, créant ainsi une échelle monochromatique harmonieuse pour la densité des données.
 
-The background uses a "Warm Sand" beige rather than pure white to reduce eye strain and reinforce the organic theme. "Crisp White" is reserved for high-elevation cards and surfaces to create clear visual separation. A tertiary "Ochre" is used sparingly for highlights or status indicators (e.g., "Remarkable Trees") to provide a natural contrast that complements the greens.
+L'arrière-plan utilise un beige « Sable Chaud » plutôt qu'un blanc pur pour réduire la fatigue oculaire et renforcer le thème organique. Le « Blanc Éclatant » est réservé aux cartes et surfaces en relief pour créer une séparation visuelle nette. Un « Ocre » tertiaire est utilisé avec parcimonie pour les points saillants ou les indicateurs de statut (par ex. : « Arbres remarquables ») afin d'offrir un contraste naturel qui complète les verts.
 
-## Typography
+## Typographie
 
-The typographic hierarchy relies on a sophisticated contrast between Serif and Sans-Serif. **Noto Serif** provides the editorial authority for headings, lending the platform a timeless, archival quality. **Manrope** is used for all functional UI elements, data points, and body copy; its balanced, modern proportions ensure high legibility in dense inventory lists and data tables. 
+La hiérarchie typographique repose sur un contraste sophistiqué entre Serif (avec empattements) et Sans-Serif (sans empattements). **Noto Serif** apporte l'autorité éditoriale aux titres, conférant à la plateforme une qualité d'archive intemporelle. **Manrope** est utilisé pour tous les éléments fonctionnels de l'interface, les points de données et le corps de texte ; ses proportions modernes et équilibrées assurent une grande lisibilité dans les listes d'inventaire denses et les tableaux de données.
 
-Titles should utilize the "itallics" variant for specific keywords to emphasize the "natural" aspect within a digital frame, as seen in the primary hero sections.
+Les titres doivent utiliser la variante italique pour certains mots-clés afin d'accentuer l'aspect « naturel » au sein du cadre numérique, comme on peut le voir dans les sections principales de type « héros ».
 
-## Layout & Spacing
+## Mise en page et Espacement
 
-The design system employs a **Fixed Grid** model for desktop views, centered at 1280px to maintain focus, and a **Fluid Grid** for tablet and mobile breakpoints. A 12-column system is the standard, with generous 24px gutters to allow the "breathable" nature of the brand to persist even in data-heavy views.
+Le système de design utilise un modèle de **grille fixe** pour les vues de bureau, centrée à 1280 pixels pour maintenir la concentration, et une **grille fluide** pour les formats tablette et mobile. Un système de 12 colonnes est la norme, avec des gouttières généreuses de 24 pixels pour permettre à la nature « respirante » de la marque de persister, même dans les vues denses en données.
 
-Rhythm is maintained through an 8px base unit. Vertical rhythm should be intentional, using larger gaps (`stack-lg`) between distinct content sections (e.g., Map vs. Table) and tighter spacing (`stack-sm`) for related form elements or card metadata.
+Le rythme est maintenu grâce à une unité de base de 8 pixels. Le rythme vertical doit être intentionnel, utilisant des espaces plus larges (`stack-lg`) entre les sections de contenu distinctes (par ex. : Carte contre Tableau) et des espacements plus serrés (`stack-sm`) pour les éléments de formulaire connexes ou les métadonnées de cartes.
 
-## Elevation & Depth
+## Élévation et Profondeur
 
-Hierarchy is established using **Tonal Layers** combined with **Ambient Shadows**. Surfaces do not "float" aggressively; instead, they sit subtly above the warm beige canvas.
+La hiérarchie est établie à l'aide de **couches tonales** combinées à des **ombres ambiantes**. Les surfaces ne « flottent » pas de manière agressive ; elles reposent subtilement au-dessus du canevas beige chaud.
 
-- **Level 0 (Canvas):** The warm sand background.
-- **Level 1 (Cards/Containers):** Crisp white surfaces with a 1px border in a very light sage tint and a soft, diffused shadow (12% opacity, 16px blur) to provide a soft landing.
-- **Level 2 (Modals/Popovers):** Higher contrast shadows and backdrop blurs to isolate the user's focus during data entry or tree registration.
+* **Niveau 0 (Canevas) :** L'arrière-plan sable chaud.
+* **Niveau 1 (Cartes/Conteneurs) :** Surfaces blanches nettes avec une bordure de 1 pixel dans une teinte sauge très légère et une ombre douce et diffuse (opacité 12 %, flou 16 pixels) pour offrir un atterrissage en douceur.
+* **Niveau 2 (Modales/Fenêtres surgissantes) :** Ombres à contraste plus élevé et flous d'arrière-plan (backdrop blur) pour isoler l'attention de l'utilisateur lors de la saisie de données ou de l'enregistrement d'un arbre.
 
-Avoid heavy black shadows; instead, use a deep green-tinted shadow to maintain the natural color harmony.
+Évitez les ombres noires lourdes ; utilisez plutôt une ombre teintée d'un vert profond pour maintenir l'harmonie des couleurs naturelles.
 
-## Shapes
+## Formes
 
-The shape language is consistently **Rounded**, reflecting the soft silhouettes found in nature. 
+Le langage des formes est systématiquement **arrondi**, reflétant les silhouettes douces trouvées dans la nature.
 
-- **Cards and Data Containers:** 1rem (`rounded-lg`) corner radius creates a friendly but structured frame.
-- **Buttons and Inputs:** 0.5rem (`rounded-md`) for a professional, clickable feel.
-- **Status Chips:** Full pill-shape for high distinctiveness in tables.
-- **Visuals:** Photography should occasionally utilize "organic" clipping paths (subtle blobs or soft-edged frames) to break the rigidity of the grid.
+* **Cartes et conteneurs de données :** Rayon d'angle de 1 rem (`rounded-lg`) pour créer un cadre amical mais structuré.
+* **Boutons et champs de saisie :** 0,5 rem (`rounded-md`) pour une sensation professionnelle et cliquable.
+* **Puces de statut :** Forme « pilule » complète pour une distinction élevée dans les tableaux.
+* **Visuels :** La photographie doit occasionnellement utiliser des masques de détourage (clipping paths) « organiques » (formes fluides ou cadres aux bords doux) pour briser la rigidité de la grille.
 
-## Components
+## Composants
 
-### Buttons
-- **Primary:** Solid Deep Forest Green with white text. High contrast, high importance.
-- **Secondary:** Outlined Sage Green with a subtle background hover state.
-- **Ghost:** No border, used for utility actions like "Clear Filters."
+### Boutons
+* **Primaire :** Vert Forêt Profond plein avec texte blanc. Contraste élevé, importance haute.
+* **Secondaire :** Vert Sauge avec contour (outlined) et un état de survol (hover) subtil en arrière-plan.
+* **Fantôme (Ghost) :** Sans bordure, utilisé pour les actions utilitaires comme « Effacer les filtres ».
 
-### Cards
-Cards are the primary vehicle for tree data. They must feature a subtle 1px border (#E5E9E2) and soft shadows. Header icons within cards should be wrapped in a soft sage circular background.
+### Cartes
+Les cartes sont le support principal des données sur les arbres. Elles doivent comporter une bordure subtile de 1 pixel (#E5E9E2) et des ombres douces. Les icônes d'en-tête dans les cartes doivent être enveloppées dans un fond circulaire vert sauge doux.
 
-### Input Fields
-Inputs use a light background fill (neutral) rather than just an outline. The focus state is a 2px Sage Green border.
+### Champs de saisie (Inputs)
+Les champs utilisent un remplissage d'arrière-plan léger (neutre) plutôt qu'un simple contour. L'état de focus est une bordure vert sauge de 2 pixels.
 
-### Data Visualizations
-Charts should utilize a gradient of the primary and secondary greens. For categorical data (like tree species), use the primary green as the anchor and step down in opacity or lightness to ensure visual cohesion.
+### Visualisation de données
+Les graphiques doivent utiliser un dégradé de verts primaires et secondaires. Pour les données catégorielles (comme les espèces d'arbres), utilisez le vert primaire comme point d'ancrage et diminuez l'opacité ou la clarté pour assurer la cohésion visuelle.
 
-### Inventory List
-The list/table component uses "Zebra Striping" with a very faint sage tint to maintain horizontal tracking across wide data points (height, diameter, age).
+### Liste d'inventaire
+Le composant de liste/tableau utilise un style « zébré » avec une teinte sauge très légère pour maintenir le suivi horizontal à travers les nombreux points de données (hauteur, diamètre, âge).
