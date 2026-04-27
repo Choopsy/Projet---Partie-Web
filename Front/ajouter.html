@@ -71,7 +71,9 @@
 
     <!-- Formulaire -->
     <form id="form-ajouter" onsubmit="submitForm(event)">
-      <div class="card">
+
+      <!-- BLOC 1 : Informations botaniques -->
+      <div class="card" style="margin-bottom:1.5rem;">
         <div class="card-header">
           <div class="card-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M17 8a5 5 0 0 0-10 0c0 4 3 6 5 8 2-2 5-4 5-8z"/></svg>
@@ -80,68 +82,119 @@
         </div>
         <div class="card-content">
           <div class="form-grid">
+
             <div class="form-group" style="grid-column:1/-1">
-              <label class="form-label">Espèce <span style="color:#c0392b">*</span></label>
-              <input type="text" id="f-espece" required placeholder="ex: Quercus robur" />
+              <label class="form-label">Espèce (nom technique) <span style="color:#c0392b">*</span></label>
+              <select id="f-nomtech" required>
+                <option value="">— Chargement… —</option>
+              </select>
             </div>
+
             <div class="form-group">
               <label class="form-label">Feuillage</label>
               <select id="f-feuillage">
-                <option value="">— Choisir —</option>
-                <option>Feuillu</option><option>Conifère</option>
+                <option value="">— Chargement… —</option>
               </select>
             </div>
+
             <div class="form-group">
-              <label class="form-label">État</label>
-              <select id="f-etat">
-                <option value="">— Choisir —</option>
-                <option>Bon</option><option>Moyen</option><option>Mauvais</option>
+              <label class="form-label">Situation</label>
+              <select id="f-situation">
+                <option value="">— Chargement… —</option>
               </select>
             </div>
+
             <div class="form-group">
-              <label class="form-label">Hauteur totale (m)</label>
-              <input type="number" id="f-hauteur" min="0" max="50" step="0.5" placeholder="8.5" />
+              <label class="form-label">Stade de développement</label>
+              <select id="f-stade" required>
+                <option value="">— Chargement… —</option>
+              </select>
             </div>
+
             <div class="form-group">
-              <label class="form-label">Hauteur du tronc (m)</label>
-              <input type="number" id="f-htronc" min="0" max="20" step="0.1" placeholder="2.0" />
+              <label class="form-label">État <span style="color:#c0392b">*</span></label>
+              <select id="f-etat" required>
+                <option value="">— Chargement… —</option>
+              </select>
             </div>
+
             <div class="form-group">
-              <label class="form-label">Diamètre du tronc (cm)</label>
-              <input type="number" id="f-diametre" min="0" max="500" step="1" placeholder="45" />
+              <label class="form-label">Type de port <span style="color:#c0392b">*</span></label>
+              <select id="f-port" required>
+                <option value="">— Chargement… —</option>
+              </select>
             </div>
+
             <div class="form-group">
-              <label class="form-label">Âge estimé (ans)</label>
-              <input type="number" id="f-age" min="0" max="1000" step="1" placeholder="25" />
+              <label class="form-label">Type de pied <span style="color:#c0392b">*</span></label>
+              <select id="f-pied" required>
+                <option value="">— Chargement… —</option>
+              </select>
             </div>
+
             <div class="form-group">
               <label class="form-label">Quartier</label>
               <select id="f-quartier">
-                <option value="">— Choisir —</option>
-                <option>Centre-Ville</option><option>Europe</option><option>Faubourg d'Isle</option>
-                <option>Vermandois</option><option>Les Champs-Elysées</option>
-                <option>Marcellin Berthelot</option><option>Saint-Martin</option>
+                <option value="">— Chargement… —</option>
               </select>
             </div>
-            <div class="form-group">
-              <label class="form-label">Stade de développement</label>
-              <select id="f-stade">
-                <option value="">— Choisir —</option>
-                <option>Jeune</option><option>Adulte</option><option>Sénescent</option>
-              </select>
-            </div>
-          </div>
 
-          <div style="margin-top:1.25rem;">
-            <label class="switch-row" style="cursor:pointer;">
-              <div>
-                <div class="switch-label">Arbre remarquable</div>
-                <div class="switch-desc">Spécimen présentant un intérêt patrimonial particulier</div>
-              </div>
-              <input type="checkbox" class="toggle" id="f-remarquable" />
-              <div class="toggle-ui" onclick="document.getElementById('f-remarquable').click()"></div>
-            </label>
           </div>
+        </div>
+      </div>
+
+      <!-- BLOC 2 : Dimensions -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M21 21H3"/><path d="M21 3v18"/><path d="m3 3 18 18"/></svg>
+            Dimensions
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label class="form-label">Hauteur totale (m) <span style="color:#c0392b">*</span></label>
+              <input type="number" id="f-hauteur" required min="0" max="50" step="0.5" placeholder="8.5" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Hauteur du tronc (m) <span style="color:#c0392b">*</span></label>
+              <input type="number" id="f-htronc" required min="0" max="20" step="0.1" placeholder="2.0" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Diamètre du tronc (cm) <span style="color:#c0392b">*</span></label>
+              <input type="number" id="f-diametre" required min="0" max="500" step="1" placeholder="45" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Date de plantation</label>
+              <input type="date" id="f-plantation" />
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOC 3 : Statut -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 3l1.9 5.87H20l-4.97 3.6 1.9 5.87L12 15.1l-4.93 3.24 1.9-5.87L4 8.87h6.1z"/></svg>
+            Statut
+          </div>
+        </div>
+        <div class="card-content">
+          <label class="switch-row" style="cursor:pointer;">
+            <div>
+              <div class="switch-label">Arbre remarquable</div>
+              <div class="switch-desc">Spécimen présentant un intérêt patrimonial particulier</div>
+            </div>
+            <input type="checkbox" class="toggle" id="f-remarquable" />
+            <div class="toggle-ui" onclick="document.getElementById('f-remarquable').click()"></div>
+          </label>
         </div>
 
         <div style="padding:1rem 1.5rem 1.5rem; border-top:1px solid var(--border); display:flex; gap:1rem; justify-content:flex-end;">
@@ -152,6 +205,7 @@
           </button>
         </div>
       </div>
+
     </form>
 
   </div>
