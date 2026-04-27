@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualiser · Patrimoine Arboré Saint-Quentin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="window.location='index.html'">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="hsl(140,40%,25%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 8a5 5 0 0 0-10 0c0 4 3 6 5 8 2-2 5-4 5-8z"/>
+          <path d="M12 16v6"/>
+        </svg>
+      </div>
+      <span class="logo-text">Patrimoine Arboré<span class="logo-sub">· Saint-Quentin</span></span>
+    </div>
+    <nav id="main-nav">
+      <a class="nav-btn" href="index.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8a5 5 0 0 0-10 0c0 4 3 6 5 8 2-2 5-4 5-8z"/><path d="M12 16v6"/></svg>
+        Accueil
+      </a>
+      <a class="nav-btn active" href="arbres.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1V10"/></svg>
+        Visualiser
+      </a>
+      <a class="nav-btn" href="clusters.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 14.5 3 21"/><path d="m13 13 2 2"/><path d="M17 17l4 4"/><path d="m21 3-9 9"/><path d="M3 3l9 9"/></svg>
+        Clusters IA
+      </a>
+      <a class="nav-btn" href="ajouter.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+        Ajouter un arbre
+      </a>
+    </nav>
+    <button class="nav-mobile-btn" onclick="toggleMobileNav()" aria-label="Menu">
+      <svg id="menu-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Visualiser le patrimoine</h1>
+        <p class="page-subtitle">Explorez les <strong>9 915 arbres</strong> recensés à Saint-Quentin.</p>
+      </div>
+      <div class="input-wrapper" style="width:100%;max-width:280px;">
+        <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search-trees" placeholder="Rechercher espèce ou quartier…" oninput="filterMap()" />
+      </div>
+    </div>
+
+    <div class="card filters-card">
+      <div class="card-content" style="padding:.85rem 1.25rem;">
+        <div class="filters-inner">
+          <span style="font-size:.82rem;color:var(--muted-fg);display:flex;align-items:center;gap:.35rem;flex-shrink:0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filtres
+          </span>
+          <div class="filter-group">
+            <label class="filter-label">Quartier</label>
+            <select id="filter-quartier" onchange="filterMap()">
+              <option value="">Tous les quartiers</option>
+              <option>Centre-Ville</option><option>Europe</option><option>Faubourg d'Isle</option>
+              <option>Vermandois</option><option>Les Champs-Elysées</option>
+              <option>Marcellin Berthelot</option><option>Saint-Martin</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Feuillage</label>
+            <select id="filter-feuillage" onchange="filterMap()">
+              <option value="">Tous</option>
+              <option>Feuillu</option><option>Conifère</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green-dark)"></div> Feuillu</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--brown)"></div> Conifère</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> Remarquable</div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-header">
+          <div class="card-title">Extrait de la base de données</div>
+          <div class="card-desc" id="tree-count">Affichage de 20 arbres parmi 9 915</div>
+        </div>
+        <div class="card-content" style="padding:.5rem 0 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Espèce</th><th>Code</th><th>Feuillage</th><th>Quartier</th><th>Hauteur (m)</th><th>Statut</th>
+              </tr>
+            </thead>
+            <tbody id="tree-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>Projet pédagogique ISEN Brest/Nantes — FISA4 2026</p>
+    <p>© 2026 Ville de Saint-Quentin</p>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+<script src="arbres.js"></script>
+</body>
+</html>
