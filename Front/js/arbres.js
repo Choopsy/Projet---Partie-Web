@@ -35,7 +35,7 @@ function renderMarkers(trees) {
       <b>${t.nom_technique ?? 'Espèce inconnue'}</b><br>
       ${t.feuillage ?? ''} · ${t.quartier ?? ''}<br>
       Hauteur: ${t.haut_tot ?? '?'} m
-      ${t.remarquable == 1 ? ' <span style="color:#8B5E2D">⭐ Remarquable</span>' : ''}
+      ${t.remarquable == 1 ? ' <span style="color:#8B5E2D">Remarquable</span>' : ''}
     `).addTo(markersLayer);
   });
 }
@@ -71,7 +71,7 @@ function filterMap() {
 function buildTable(data) {
   const tbody = document.getElementById('tree-tbody');
   tbody.innerHTML = data.length === 0
-    ? `<tr><td colspan="7" style="text-align:center;color:var(--muted-fg);padding:2rem;">Aucun arbre trouvé</td></tr>`
+    ? `<tr><td colspan="12" style="text-align:center;color:var(--muted-fg);padding:2rem;">Aucun arbre trouvé</td></tr>`
     : data.map(t => `
         <tr>
           <td style="text-align:center;">
@@ -83,7 +83,7 @@ function buildTable(data) {
           <td>${t.tronc_diam ?? '—'}</td>
           <td style="text-align:center;">
             ${t.remarquable == 1
-              ? '<span class="badge badge-amber">⭐ Oui</span>'
+              ? '<span class="badge badge-amber">Oui</span>'
               : '<span style="color:var(--muted-fg)">Non</span>'
             }
           </td>
@@ -101,19 +101,19 @@ function buildTable(data) {
 //  PRÉDICTION — Redirige vers prediction.html
 // ============================================================
 function predire(type) {
+  if (type === 'options') {
+    // Saisie manuelle — ouvre l'onglet manuel directement
+    window.location.href = 'prediction.html?tab=manuel';
+    return;
+  }
 
   const selected = document.querySelector('input[name="selected-tree"]:checked');
-  if (type == "options") {
-    window.location.href = `prediction.html?type=${type}`;
-  } 
-  else {
-    if (!selected) {
-      showToast('❌ Veuillez sélectionner un arbre dans le tableau.', true);
-      return;
-    }
-    const globalId = selected.value;
-    window.location.href = `prediction.html?global_id=${globalId}&type=${type}`;
+  if (!selected) {
+    showToast('❌ Veuillez sélectionner un arbre dans le tableau.', true);
+    return;
   }
+  const globalId = selected.value;
+  window.location.href = `prediction.html?global_id=${encodeURIComponent(globalId)}&type=${type}`;
 }
 
 // ============================================================
@@ -146,7 +146,6 @@ async function loadArbres() {
     const data = await res.json();
 
     ALL_TREES_DB = data;
-
     renderMarkers(data);
     buildTable(data);
 

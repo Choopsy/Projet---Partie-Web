@@ -8,6 +8,7 @@ const API_BASE = '/Projet---Partie-Web/Front/php';
 const params   = new URLSearchParams(window.location.search);
 const globalId = params.get('global_id');
 const typeUrl  = params.get('type');
+const tabUrl   = params.get('tab'); // 'manuel' si depuis bouton saisie manuelle
 
 let autoType   = typeUrl || '';
 let manuelType = '';
@@ -27,16 +28,20 @@ const RISQUE_CONFIG = {
 window.addEventListener('load', async () => {
   await loadReferentiels();
 
-  // Si on arrive depuis le tableau avec un global_id
+  // Si on arrive depuis "Saisie manuelle" → ouvre l'onglet manuel
+  if (tabUrl === 'manuel') {
+    switchTab('manuel');
+    return;
+  }
+
+  // Si on arrive depuis le tableau avec un arbre sélectionné
   if (globalId && autoType) {
     switchTab('auto');
     setAutoType(autoType);
 
-    // Affiche l'info de l'arbre
     document.getElementById('auto-arbre-info').innerHTML =
       `<strong>ID :</strong> <code style="font-family:'Space Mono',monospace">${globalId}</code>`;
 
-    // Lance la prédiction directement
     lancerPredictionAuto();
   }
 });
@@ -56,16 +61,18 @@ function switchTab(tab) {
 // ============================================================
 function setAutoType(type) {
   autoType = type;
+
   document.getElementById('auto-btn-age').classList.toggle('btn-primary', type === 'age');
   document.getElementById('auto-btn-age').classList.toggle('btn-outline', type !== 'age');
   document.getElementById('auto-btn-tempete').classList.toggle('btn-primary', type === 'tempete');
   document.getElementById('auto-btn-tempete').classList.toggle('btn-outline', type !== 'tempete');
-  document.getElementById('auto-btn-tempete').classList.toggle('btn-primary', type === 'tempete');
-  document.getElementById('auto-btn-tempete').classList.toggle('btn-outline', type !== 'tempete');
 
-  // Reset résultats
-  document.getElementById('auto-result').style.display = 'none';
-  document.getElementById('auto-error').style.display  = 'none';
+  // Reset résultats et relance si un arbre est sélectionné
+  resetZone('auto');
+
+  if (globalId && type) {
+    lancerPredictionAuto();
+  }
 }
 
 // ============================================================
@@ -73,6 +80,7 @@ function setAutoType(type) {
 // ============================================================
 function setManuelType(type) {
   manuelType = type;
+
   document.getElementById('manuel-btn-age').classList.toggle('btn-primary', type === 'age');
   document.getElementById('manuel-btn-age').classList.toggle('btn-outline', type !== 'age');
   document.getElementById('manuel-btn-tempete').classList.toggle('btn-primary', type === 'tempete');
@@ -85,8 +93,7 @@ function setManuelType(type) {
   document.getElementById('btn-lancer').disabled = false;
 
   // Reset résultats
-  document.getElementById('manuel-result').style.display = 'none';
-  document.getElementById('manuel-error').style.display  = 'none';
+  resetZone('manuel');
 }
 
 // ============================================================
@@ -122,19 +129,9 @@ async function loadReferentiels() {
 //  PRÉDICTION AUTO — depuis BDD
 // ============================================================
 async function lancerPredictionAuto() {
-  if (!globalId) {
-    document.getElementById('auto-error').style.display   = 'block';
-    document.getElementById('auto-error-msg').textContent = 'Aucun arbre sélectionné.';
-    return;
-  }
-  if (!autoType) {
-    showToast('❌ Veuillez choisir un type de prédiction.', true);
-    return;
-  }
+  if (!globalId || !autoType) return;
 
-  document.getElementById('auto-loading').style.display = 'block';
-  document.getElementById('auto-result').style.display  = 'none';
-  document.getElementById('auto-error').style.display   = 'none';
+  showLoading('auto');
 
   try {
     const res  = await fetch(`${API_BASE}/predict.php?action=${autoType}`, {
@@ -144,22 +141,19 @@ async function lancerPredictionAuto() {
     });
     const data = await res.json();
 
-    document.getElementById('auto-loading').style.display = 'none';
+    hideLoading('auto');
 
     if (!res.ok || data.error) {
-      document.getElementById('auto-error').style.display   = 'block';
-      document.getElementById('auto-error-msg').textContent = data.error ?? 'Erreur serveur';
+      showError('auto', data.error ?? 'Erreur serveur');
       return;
     }
 
-    document.getElementById('auto-result').style.display   = 'block';
-    document.getElementById('auto-result').innerHTML       = buildResultHTML(data, autoType);
-    animateBarre();
+    showResult('auto', data, autoType);
 
   } catch (err) {
-    document.getElementById('auto-loading').style.display = 'none';
-    document.getElementById('auto-error').style.display   = 'block';
-    document.getElementById('auto-error-msg').textContent = 'Erreur de connexion au serveur.';
+    hideLoading('auto');
+    showError('auto', 'Erreur de connexion au serveur.');
+    console.error(err);
   }
 }
 
@@ -181,9 +175,7 @@ async function lancerPredictionManuelle() {
     return;
   }
 
-  document.getElementById('manuel-loading').style.display = 'block';
-  document.getElementById('manuel-result').style.display  = 'none';
-  document.getElementById('manuel-error').style.display   = 'none';
+  showLoading('manuel');
 
   let body = { manuel: true, haut_tot: hautTot, haut_tronc: hautTronc, tronc_diam: troncDiam };
 
@@ -209,28 +201,37 @@ async function lancerPredictionManuelle() {
     });
     const data = await res.json();
 
-    document.getElementById('manuel-loading').style.display = 'none';
+    hideLoading('manuel');
 
     if (!res.ok || data.error) {
-      document.getElementById('manuel-error').style.display   = 'block';
-      document.getElementById('manuel-error-msg').textContent = data.error ?? 'Erreur serveur';
+      showError('manuel', data.error ?? 'Erreur serveur');
       return;
     }
 
-    document.getElementById('manuel-result').style.display = 'block';
-    document.getElementById('manuel-result').innerHTML     = buildResultHTML(data, manuelType);
-    animateBarre();
+    showResult('manuel', data, manuelType);
 
   } catch (err) {
-    document.getElementById('manuel-loading').style.display = 'none';
-    document.getElementById('manuel-error').style.display   = 'block';
-    document.getElementById('manuel-error-msg').textContent = 'Erreur de connexion au serveur.';
+    hideLoading('manuel');
+    showError('manuel', 'Erreur de connexion au serveur.');
+    console.error(err);
   }
 }
 
 // ============================================================
-//  CONSTRUCTION DU HTML RÉSULTAT
+//  AFFICHAGE DES RÉSULTATS
 // ============================================================
+function showResult(zone, data, type) {
+  const el = document.getElementById(`${zone}-result`);
+  el.style.display = 'block';
+  el.innerHTML     = buildResultHTML(data, type);
+
+  // Animation barre de risque
+  setTimeout(() => {
+    const barre = document.getElementById('barre-risque');
+    if (barre) barre.style.width = barre.dataset.width;
+  }, 100);
+}
+
 function buildResultHTML(data, type) {
   if (type === 'age') {
     return `
@@ -273,7 +274,11 @@ function buildResultHTML(data, type) {
               <span>Risque faible</span><span>Risque critique</span>
             </div>
             <div style="background:var(--border);border-radius:99px;height:14px;overflow:hidden;">
-              <div id="barre-risque" style="height:100%;border-radius:99px;background:${config.color};width:0%;transition:width .8s ease;"></div>
+              <div
+                id="barre-risque"
+                data-width="${config.width}"
+                style="height:100%;border-radius:99px;background:${config.color};width:0%;transition:width .8s ease;"
+              ></div>
             </div>
             <div style="font-size:.9rem;font-weight:600;margin-top:.5rem;text-align:center;color:${config.color};">
               Niveau de risque : ${config.label}
@@ -289,17 +294,25 @@ function buildResultHTML(data, type) {
 }
 
 // ============================================================
-//  ANIMATION BARRE DE RISQUE
+//  UTILITAIRES
 // ============================================================
-function animateBarre() {
-  setTimeout(() => {
-    const barre = document.getElementById('barre-risque');
-    if (barre) {
-      const target = barre.style.background;
-      const config = Object.values(RISQUE_CONFIG).find(c => c.color === target);
-      if (config) barre.style.width = config.width;
-      // fallback : lit data-width si on en avait mis
-      else barre.style.width = barre.dataset.width ?? '50%';
-    }
-  }, 100);
+function showLoading(zone) {
+  document.getElementById(`${zone}-loading`).style.display = 'block';
+  document.getElementById(`${zone}-result`).style.display  = 'none';
+  document.getElementById(`${zone}-error`).style.display   = 'none';
+}
+
+function hideLoading(zone) {
+  document.getElementById(`${zone}-loading`).style.display = 'none';
+}
+
+function showError(zone, msg) {
+  document.getElementById(`${zone}-error`).style.display   = 'block';
+  document.getElementById(`${zone}-error-msg`).textContent = msg;
+}
+
+function resetZone(zone) {
+  document.getElementById(`${zone}-result`).style.display  = 'none';
+  document.getElementById(`${zone}-error`).style.display   = 'none';
+  document.getElementById(`${zone}-loading`).style.display = 'none';
 }
