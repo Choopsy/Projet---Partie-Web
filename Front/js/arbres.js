@@ -109,7 +109,7 @@ function predire(type) {
 
   const selected = document.querySelector('input[name="selected-tree"]:checked');
   if (!selected) {
-    showToast('❌ Veuillez sélectionner un arbre dans le tableau.', true);
+    showToast('Veuillez sélectionner un arbre dans le tableau.', true);
     return;
   }
   const globalId = selected.value;

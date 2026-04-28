@@ -61,7 +61,6 @@ function switchTab(tab) {
 // ============================================================
 function setAutoType(type) {
   autoType = type;
-
   document.getElementById('auto-btn-age').classList.toggle('btn-primary', type === 'age');
   document.getElementById('auto-btn-age').classList.toggle('btn-outline', type !== 'age');
   document.getElementById('auto-btn-tempete').classList.toggle('btn-primary', type === 'tempete');
@@ -80,7 +79,6 @@ function setAutoType(type) {
 // ============================================================
 function setManuelType(type) {
   manuelType = type;
-
   document.getElementById('manuel-btn-age').classList.toggle('btn-primary', type === 'age');
   document.getElementById('manuel-btn-age').classList.toggle('btn-outline', type !== 'age');
   document.getElementById('manuel-btn-tempete').classList.toggle('btn-primary', type === 'tempete');
@@ -162,7 +160,7 @@ async function lancerPredictionAuto() {
 // ============================================================
 async function lancerPredictionManuelle() {
   if (!manuelType) {
-    showToast('❌ Veuillez choisir un type de prédiction.', true);
+    showToast('Veuillez choisir un type de prédiction.', true);
     return;
   }
 
@@ -171,7 +169,7 @@ async function lancerPredictionManuelle() {
   const troncDiam = parseFloat(document.getElementById('m-tronc-diam').value);
 
   if (isNaN(hautTot) || isNaN(hautTronc) || isNaN(troncDiam)) {
-    showToast('❌ Veuillez remplir les 3 dimensions obligatoires.', true);
+    showToast('Veuillez remplir les 3 dimensions obligatoires.', true);
     return;
   }
 
