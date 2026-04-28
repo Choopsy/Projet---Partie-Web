@@ -69,7 +69,7 @@ L’objectif est de fournir un outil complet pour :
 
 ---
 
-## 📂 Structure du projet
+## Structure du projet
 
 ```
 /css
@@ -79,7 +79,7 @@ L’objectif est de fournir un outil complet pour :
 /php
 ```
 
-## 🤝 Contribution
+## Contribution
 
 PELLE Jules
 PERRET Cheun
