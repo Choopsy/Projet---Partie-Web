@@ -108,24 +108,37 @@
           <div class="card-desc" id="tree-count">Affichage de 20 arbres parmi 9 915</div>
         </div>
         <div class="card-content" style="padding:.5rem 0 0;">
-          <table>
-            <thead>
-              <tr>
-                <th>Espèce</th><th>Code</th><th>Feuillage</th><th>Quartier</th><th>Hauteur (m)</th><th>Statut</th>
-              </tr>
-            </thead>
-            <tbody id="tree-tbody"></tbody>
-          </table>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Espèce</th>
+                  <th>Code</th>
+                  <th>Feuillage</th>
+                  <th>Quartier</th>
+                  <th class="num">Hauteur totale</th>
+                  <th class="num">H. tronc</th>
+                  <th class="num">Ø tronc</th>
+                  <th>État</th>
+                  <th>Stade</th>
+                  <th class="num">Latitude</th>
+                  <th class="num">Longitude</th>
+                  <th>Remarquable</th>
+                </tr>
+              </thead>
+              <tbody id="tree-tbody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
 </main>
 
 <footer>
   <div class="footer-inner">
-    <p>Projet pédagogique ISEN Brest/Nantes — FISA4 2026</p>
+    <p>Projet pédagogique ISEN Brest — FISA4 2026</p>
+    <p>Réalisé par Cheun PERRET, Jules PELLE et Erwann Ferezou</p>
     <p>© 2026 Ville de Saint-Quentin</p>
   </div>
 </footer>
