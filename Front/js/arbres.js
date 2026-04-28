@@ -26,10 +26,10 @@ function renderMarkers(trees) {
   trees.forEach(t => {
     if (!t.x || !t.y) return;
     L.circleMarker([t.y, t.x], {
-      radius: t.remarquable == 1 ? 7 : 5,
-      fillColor: getColor(t),
-      color: 'rgba(255,255,255,.4)',
-      weight: 1,
+      radius     : t.remarquable == 1 ? 7 : 5,
+      fillColor  : getColor(t),
+      color      : 'rgba(255,255,255,.4)',
+      weight     : 1,
       fillOpacity: .75,
     }).bindPopup(`
       <b>${t.nom_technique ?? 'Espèce inconnue'}</b><br>
@@ -53,8 +53,8 @@ function filterMap() {
   const filtered = ALL_TREES_DB.filter(t => {
     if (quartier  && t.quartier  !== quartier)  return false;
     if (feuillage && t.feuillage !== feuillage) return false;
-    if (search && 
-        !t.nom_technique?.toLowerCase().includes(search) && 
+    if (search &&
+        !t.nom_technique?.toLowerCase().includes(search) &&
         !t.quartier?.toLowerCase().includes(search)) return false;
     return true;
   });
@@ -71,24 +71,69 @@ function filterMap() {
 function buildTable(data) {
   const tbody = document.getElementById('tree-tbody');
   tbody.innerHTML = data.length === 0
-    ? `<tr><td colspan="6" style="text-align:center;color:var(--muted-fg);padding:2rem;">Aucun arbre trouvé</td></tr>`
+    ? `<tr><td colspan="7" style="text-align:center;color:var(--muted-fg);padding:2rem;">Aucun arbre trouvé</td></tr>`
     : data.map(t => `
         <tr>
-          <td><strong>${t.nom_technique ?? '—'}</strong></td>
-          <td><code style="font-family:'Space Mono',monospace;font-size:.8rem;color:var(--muted-fg)">${t.global_id}</code></td>
-          <td>
-            <span class="badge ${t.feuillage === 'Conifère' ? 'badge-brown' : 'badge-green'}">
-              ${t.feuillage ?? '—'}
-            </span>
+          <td style="text-align:center;">
+            <input type="radio" name="selected-tree" value="${t.global_id}" />
           </td>
-          <td>${t.quartier ?? '—'}</td>
+          <td><strong>${t.nom_technique ?? '—'}</strong></td>
           <td>${t.haut_tot ?? '—'}</td>
-          <td>${t.remarquable == 1
-            ? '<span class="badge badge-amber">⭐ Remarquable</span>'
-            : '<span style="color:var(--muted-fg)">Standard</span>'
-          }</td>
+          <td>${t.haut_tronc ?? '—'}</td>
+          <td>${t.tronc_diam ?? '—'}</td>
+          <td style="text-align:center;">
+            ${t.remarquable == 1
+              ? '<span class="badge badge-amber">⭐ Oui</span>'
+              : '<span style="color:var(--muted-fg)">Non</span>'
+            }
+          </td>
+          <td><code style="font-size:.78rem;color:var(--muted-fg)">${t.y ?? '—'}</code></td>
+          <td><code style="font-size:.78rem;color:var(--muted-fg)">${t.x ?? '—'}</code></td>
+          <td>${t.etat ?? '—'}</td>
+          <td>${t.stade_developpement ?? '—'}</td>
+          <td>${t.port ?? '—'}</td>
+          <td>${t.pied ?? '—'}</td>
         </tr>
       `).join('');
+}
+
+// ============================================================
+//  PRÉDICTION — Redirige vers prediction.html
+// ============================================================
+function predire(type) {
+
+  const selected = document.querySelector('input[name="selected-tree"]:checked');
+  if (type == "options") {
+    window.location.href = `prediction.html?type=${type}`;
+  } 
+  else {
+    if (!selected) {
+      showToast('❌ Veuillez sélectionner un arbre dans le tableau.', true);
+      return;
+    }
+    const globalId = selected.value;
+    window.location.href = `prediction.html?global_id=${globalId}&type=${type}`;
+  }
+}
+
+// ============================================================
+//  CHARGEMENT DES QUARTIERS POUR LE FILTRE
+// ============================================================
+async function loadQuartiers() {
+  try {
+    const res  = await fetch(`${API_BASE}/referentiels.php?route=quartiers`);
+    const data = await res.json();
+    const select = document.getElementById('filter-quartier');
+    select.innerHTML = '<option value="">Tous les quartiers</option>';
+    data.forEach(q => {
+      const opt = document.createElement('option');
+      opt.value       = q.Quartier;
+      opt.textContent = q.Quartier;
+      select.appendChild(opt);
+    });
+  } catch (e) {
+    console.error('Erreur chargement quartiers:', e);
+  }
 }
 
 // ============================================================
@@ -119,5 +164,10 @@ async function loadArbres() {
 // ============================================================
 window.addEventListener('load', () => {
   initMapArbres();
+  loadQuartiers();
   loadArbres();
+
+  document.getElementById('btn-plus-options').addEventListener('click', () => predire('options'));
+  document.getElementById('btn-predire-age').addEventListener('click', () => predire('age'));
+  document.getElementById('btn-predire-tempete').addEventListener('click', () => predire('tempete'));
 });

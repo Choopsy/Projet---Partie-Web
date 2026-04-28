@@ -10,6 +10,22 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="./css/style.css" />
+  <style>
+    input[type="radio"] {
+      display: inline-block !important;
+      width: 18px !important;
+      height: 18px !important;
+      min-width: 18px !important;
+      cursor: pointer !important;
+      accent-color: var(--primary, #2D6A4F) !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      position: static !important;
+    }
+    tr:has(input[type="radio"]:checked) {
+      background: rgba(45, 106, 79, 0.08) !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -18,13 +34,16 @@
   <div class="header-inner">
     <div class="logo" onclick="window.location='index.html'">
       <div class="logo-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tree-pine h-4 w-4" aria-hidden="true"><path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z"></path><path d="M12 22v-3"></path></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="hsl(140,40%,25%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 8a5 5 0 0 0-10 0c0 4 3 6 5 8 2-2 5-4 5-8z"/>
+          <path d="M12 16v6"/>
+        </svg>
       </div>
       <span class="logo-text">Patrimoine Arboré<span class="logo-sub">· Saint-Quentin</span></span>
     </div>
     <nav id="main-nav">
       <a class="nav-btn" href="index.html">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tree-pine h-4 w-4" aria-hidden="true"><path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z"></path><path d="M12 22v-3"></path></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8a5 5 0 0 0-10 0c0 4 3 6 5 8 2-2 5-4 5-8z"/><path d="M12 16v6"/></svg>
         Accueil
       </a>
       <a class="nav-btn active" href="arbres.html">
@@ -59,7 +78,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">Visualiser le patrimoine</h1>
-        <p class="page-subtitle">Explorez les <strong>9 915 arbres</strong> recensés à Saint-Quentin.</p>
+        <p class="page-subtitle">Explorez les arbres recensés à Saint-Quentin.</p>
       </div>
       <div class="input-wrapper" style="width:100%;max-width:280px;">
         <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -77,9 +96,6 @@
             <label class="filter-label">Quartier</label>
             <select id="filter-quartier" onchange="filterMap()">
               <option value="">Tous les quartiers</option>
-              <option>Centre-Ville</option><option>Europe</option><option>Faubourg d'Isle</option>
-              <option>Vermandois</option><option>Les Champs-Elysées</option>
-              <option>Marcellin Berthelot</option><option>Saint-Martin</option>
             </select>
           </div>
           <div class="filter-group">
@@ -104,32 +120,50 @@
     <div class="table-wrap">
       <div class="card" style="margin-top:1.5rem;">
         <div class="card-header">
-          <div class="card-title">Extrait de la base de données</div>
-          <div class="card-desc" id="tree-count">Affichage de 20 arbres parmi 9 915</div>
+          <div class="card-title">Base de données des arbres</div>
+          <div class="card-desc" id="tree-count">Chargement…</div>
         </div>
         <div class="card-content" style="padding:.5rem 0 0;">
-          <div class="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>Espèce</th>
-                  <th>Code</th>
-                  <th>Feuillage</th>
-                  <th>Quartier</th>
-                  <th class="num">Hauteur totale</th>
-                  <th class="num">H. tronc</th>
-                  <th class="num">Ø tronc</th>
-                  <th>État</th>
-                  <th>Stade</th>
-                  <th class="num">Latitude</th>
-                  <th class="num">Longitude</th>
-                  <th>Remarquable</th>
-                </tr>
-              </thead>
-              <tbody id="tree-tbody"></tbody>
-            </table>
-          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:60px;text-align:center;">Sélection</th>
+                <th>Espèce</th>
+                <th>H. totale (m)</th>
+                <th>H. tronc (m)</th>
+                <th>Ø tronc (cm)</th>
+                <th>Remarquable</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>État</th>
+                <th>Stade</th>
+                <th>Port</th>
+                <th>Pied</th>
+              </tr>
+            </thead>
+            <tbody id="tree-tbody"></tbody>
+          </table>
         </div>
+
+        <!-- Boutons prédiction -->
+        <div style="padding:1rem 1.5rem 1.5rem;border-top:1px solid var(--border);display:flex;gap:1rem;justify-content:flex-end;flex-wrap:wrap;align-items:center;">
+          <p style="font-size:.82rem;color:var(--muted-fg);margin-right:auto;margin-bottom:0;">
+            Sélectionnez un arbre puis lancez une prédiction IA
+          </p>
+          <button class="btn btn-outline" id="btn-plus-options">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Saisie manuelle
+          </button>
+          <button class="btn btn-primary" id="btn-predire-age">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Prédire l'âge
+          </button>
+          <button class="btn btn-primary" id="btn-predire-tempete">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><polyline points="13 11 9 17 15 17 11 23"/></svg>
+            Prédire le déracinement
+          </button>
+        </div>
+
       </div>
     </div>
   </div>

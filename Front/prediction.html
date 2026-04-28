@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prédiction · Patrimoine Arboré Saint-Quentin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <style>
+    .tab-bar {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0;
+    }
+    .tab-btn {
+      padding: .6rem 1.25rem;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: .9rem;
+      color: var(--muted-fg);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color .15s, border-color .15s;
+    }
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="window.location='index.html'">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="hsl(140,40%,25%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 8a5 5 0 0 0-10 0c0 4 3 6 5 8 2-2 5-4 5-8z"/>
+          <path d="M12 16v6"/>
+        </svg>
+      </div>
+      <span class="logo-text">Patrimoine Arboré<span class="logo-sub">· Saint-Quentin</span></span>
+    </div>
+    <nav id="main-nav">
+      <a class="nav-btn" href="index.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8a5 5 0 0 0-10 0c0 4 3 6 5 8 2-2 5-4 5-8z"/><path d="M12 16v6"/></svg>
+        Accueil
+      </a>
+      <a class="nav-btn active" href="arbres.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1V10"/></svg>
+        Visualiser
+      </a>
+      <a class="nav-btn" href="clusters.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 14.5 3 21"/><path d="m13 13 2 2"/><path d="M17 17l4 4"/><path d="m21 3-9 9"/><path d="M3 3l9 9"/></svg>
+        Clusters IA
+      </a>
+      <a class="nav-btn" href="ajouter.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+        Ajouter un arbre
+      </a>
+    </nav>
+    <button class="nav-mobile-btn" onclick="toggleMobileNav()" aria-label="Menu">
+      <svg id="menu-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="container" style="padding-top:2rem;padding-bottom:3rem;max-width:860px;">
+
+    <div style="margin-bottom:1.5rem;">
+      <a href="arbres.html" style="color:var(--muted-fg);font-size:.9rem;display:flex;align-items:center;gap:.4rem;margin-bottom:1rem;text-decoration:none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Retour à la liste
+      </a>
+      <h1 style="font-size:1.75rem;">Prédictions IA</h1>
+      <p style="color:var(--muted-fg);margin-top:.3rem;">Estimation de l'âge ou du risque de déracinement par tempête.</p>
+    </div>
+
+    <!-- Onglets -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-auto-btn" onclick="switchTab('auto')">
+        Depuis la base de données
+      </button>
+      <button class="tab-btn" id="tab-manuel-btn" onclick="switchTab('manuel')">
+        Saisie manuelle
+      </button>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ONGLET AUTO                                                    -->
+    <!-- ============================================================ -->
+    <div class="tab-panel active" id="tab-auto">
+
+      <!-- Info arbre depuis URL -->
+      <div class="card" style="margin-bottom:1.5rem;" id="auto-arbre-card">
+        <div class="card-header">
+          <div class="card-title">Arbre sélectionné</div>
+        </div>
+        <div class="card-content">
+          <p id="auto-arbre-info" style="color:var(--muted-fg);">Aucun arbre sélectionné — allez sur la page Visualiser et cliquez sur "Âge" ou "Tempête" d'un arbre.</p>
+        </div>
+      </div>
+
+      <!-- Choix du type -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header"><div class="card-title">Type de prédiction</div></div>
+        <div class="card-content" style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <button class="btn btn-outline" id="auto-btn-age" onclick="setAutoType('age')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Prédire l'âge
+          </button>
+          <button class="btn btn-outline" id="auto-btn-tempete" onclick="setAutoType('tempete')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><polyline points="13 11 9 17 15 17 11 23"/></svg>
+            Prédire le déracinement
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading auto -->
+      <div id="auto-loading" style="display:none;text-align:center;padding:2rem;color:var(--muted-fg);">
+        <svg class="spin" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        <p style="margin-top:.75rem;">Calcul en cours…</p>
+      </div>
+
+      <!-- Résultat auto -->
+      <div id="auto-result" style="display:none;"></div>
+
+      <!-- Erreur auto -->
+      <div id="auto-error" style="display:none;" class="card">
+        <div class="card-content" style="color:#c0392b;padding:1.5rem;text-align:center;">
+          <p id="auto-error-msg"></p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ONGLET MANUEL                                                  -->
+    <!-- ============================================================ -->
+    <div class="tab-panel" id="tab-manuel">
+
+      <!-- Type de prédiction -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header"><div class="card-title">Type de prédiction</div></div>
+        <div class="card-content" style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <button class="btn btn-outline" id="manuel-btn-age" onclick="setManuelType('age')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Prédire l'âge
+          </button>
+          <button class="btn btn-outline" id="manuel-btn-tempete" onclick="setManuelType('tempete')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><polyline points="13 11 9 17 15 17 11 23"/></svg>
+            Prédire le déracinement
+          </button>
+        </div>
+      </div>
+
+      <!-- Formulaire dimensions (commun) -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header">
+          <div class="card-title">Dimensions de l'arbre <span style="color:#c0392b">*</span></div>
+          <div class="card-desc">Champs obligatoires pour les deux types de prédiction</div>
+        </div>
+        <div class="card-content">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Hauteur totale (m) <span style="color:#c0392b">*</span></label>
+              <input type="number" id="m-haut-tot" min="0" max="50" step="0.5" placeholder="ex: 12" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hauteur du tronc (m) <span style="color:#c0392b">*</span></label>
+              <input type="number" id="m-haut-tronc" min="0" max="20" step="0.1" placeholder="ex: 3" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Diamètre du tronc (cm) <span style="color:#c0392b">*</span></label>
+              <input type="number" id="m-tronc-diam" min="0" max="500" step="1" placeholder="ex: 45" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Champs supplémentaires tempête -->
+      <div class="card" id="champs-tempete" style="margin-bottom:1.5rem;display:none;">
+        <div class="card-header">
+          <div class="card-title">Caractéristiques supplémentaires</div>
+          <div class="card-desc">Optionnel — améliore la précision de la prédiction tempête</div>
+        </div>
+        <div class="card-content">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Âge estimé (ans)</label>
+              <input type="number" id="m-age" min="0" max="1000" step="1" placeholder="ex: 25" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stade de développement</label>
+              <select id="m-stade"><option value="">— Choisir —</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type de port</label>
+              <select id="m-port"><option value="">— Choisir —</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type de pied</label>
+              <select id="m-pied"><option value="">— Choisir —</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Situation</label>
+              <select id="m-situation"><option value="">— Choisir —</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Feuillage</label>
+              <select id="m-feuillage"><option value="">— Choisir —</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Arbre remarquable</label>
+              <select id="m-remarquable">
+                <option value="Non">Non</option>
+                <option value="Oui">Oui</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Revêtement</label>
+              <select id="m-revetement">
+                <option value="Non">Non</option>
+                <option value="Oui">Oui</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton lancer -->
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
+        <button class="btn btn-primary" id="btn-lancer" onclick="lancerPredictionManuelle()" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Lancer la prédiction
+        </button>
+      </div>
+
+      <!-- Loading manuel -->
+      <div id="manuel-loading" style="display:none;text-align:center;padding:2rem;color:var(--muted-fg);">
+        <svg class="spin" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        <p style="margin-top:.75rem;">Calcul en cours…</p>
+      </div>
+
+      <!-- Résultat manuel -->
+      <div id="manuel-result" style="display:none;"></div>
+
+      <!-- Erreur manuel -->
+      <div id="manuel-error" style="display:none;" class="card">
+        <div class="card-content" style="color:#c0392b;padding:1.5rem;text-align:center;">
+          <p id="manuel-error-msg"></p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>Projet pédagogique ISEN Brest/Nantes — FISA4 2026</p>
+    <p>© 2026 Ville de Saint-Quentin</p>
+  </div>
+</footer>
+
+<script src="./js/shared.js"></script>
+<script src="./js/prediction.js"></script>
+</body>
+</html>

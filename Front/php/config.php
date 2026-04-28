@@ -39,3 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
+
+// ============================================================
+//  CHEMINS IA
+// ============================================================
+
+// Détection automatique de l'environnement
+if ($_SERVER['SERVER_NAME'] === 'localhost') {
+    define('IA_BASE', 'C:\\laragon\\www\\Projet---Partie-Web\\Front\\ia');
+} else {
+    define('IA_BASE', '/var/www/html/Projet---Partie-Web/Front/ia');
+}
